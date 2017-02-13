@@ -1,0 +1,100 @@
+<rsuite-plugin id="@pluginId@" version="@pluginVersion@ at @timeStamp@">
+
+	<extensionProvider id="rsuite.WebService">
+		<remoteApiDefinition id="rsuite.downloadAsZip"
+		                     handler="com.rsicms.rsuite.webservice.DownloadAsZipWebService"
+		                     description="Loads contents of a Zip archive into RSuite CMS">
+		</remoteApiDefinition>
+	</extensionProvider>
+
+	<extensionProvider id="rsuite.Forms">
+		<formDefinition	id="com.rsicms.downloadZip"
+		                label="Download Content Assembly As ZIP File"
+		                description="Configures ZIP download">
+			<instructions>
+				Select the kinds of items you want to include in the ZIP.
+			</instructions>
+			<paramList>
+				<param>
+					<name>xmlMos</name>
+					<label>XML Managed Object</label>
+					<formControlType>checkbox</formControlType>
+				</param>
+			</paramList>
+		</formDefinition>
+	</extensionProvider>
+
+	<extensionProvider id="rsuite.Workflow">
+		<actionHandler label="Export Content Assembly"
+		               type="com.rsicms.rsuite.workflow.actions.ExportContentAssemblyItem"
+		               description="Export some or all of a content assembly as a Zip file.">
+			<variableList>
+				<variable>
+					<name>includeExtensions</name>
+				</variable>
+				<variable>
+					<name>excludeExtensions</name>
+				</variable>
+				<variable>
+					<name>exportPath</name>
+				</variable>
+				<variable>
+					<name>filenameSuffix</name>
+				</variable>
+				<variable>
+					<name>zipCaCorrelationKey</name>
+				</variable>
+			</variableList>
+		</actionHandler>
+	</extensionProvider>
+
+	<extensionProvider id="rsuite.ContextMenu">
+		<contextMenuRuleSet name="rsuite:download-items-as-zip"
+		                    scope="searchResults,browseTree">
+			<menuItemList>
+				<menuItem id="rsuite:download-selection-as-zip">
+				<actionName>rsuite:invokeWebservice</actionName>
+				<label>Download selection as .zip</label>
+					<property name="remoteApiName" value="rsuite.downloadAsZip" />
+					<property name="useTransport" value="iframe" />
+					<property name="timeout" value="0" />
+					<property name="rsuite:icon" value="downloadAsZip" />
+					<property name="rsuite:rule" value="isMO || areMOs" />
+				 </menuItem>
+			 </menuItemList>
+		</contextMenuRuleSet>
+		<contextMenuRuleSet name="rsuite:download-container-as-zip"
+		                    scope="targetNode,browseTreeNode,searchResultsNode,clipboardNode,taskDetailNode">
+			<menuItemList>
+				<menuItem id="rsuite:download-container-as-zip">
+					<actionName>rsuite:invokeWebservice</actionName>
+					<label>Download as .zip</label>
+					<property name="remoteApiName" value="rsuite.downloadAsZip" />
+					<property name="useTransport" value="iframe" />
+					<property name="type" value="get" />
+					<property name="timeout" value="0" />
+					<property name="rsuite:icon" value="downloadAsZip" />
+				 </menuItem>
+			 </menuItemList>
+			<ruleList>
+				 <rule>include nodeType ca,canode</rule>
+				 <rule>exclude nodeType home</rule>
+			</ruleList>
+		</contextMenuRuleSet>
+		<contextMenuRuleSet name="contextmenuitem.com.rsicms:download-briefcase-as-zip"
+		                    scope="clipboard">
+			<menuItemList>
+				<menuItem id="rsuite:download-briefcase-as-zip">
+					<actionName>rsuite:invokeWebservice</actionName>
+					<label>Download as .zip</label>
+					<property name="remoteApiName" value="rsuite.downloadAsZip" />
+					<property name="useTransport" value="iframe" />
+					<property name="timeout" value="0" />
+					<property name="rsuite:icon" value="downloadAsZip" />
+					<property name="rsuite-rule" value="isMO || areMOs" />
+				 </menuItem>
+			 </menuItemList>
+		</contextMenuRuleSet>
+	</extensionProvider>
+
+</rsuite-plugin>
